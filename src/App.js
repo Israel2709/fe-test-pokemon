@@ -28,10 +28,6 @@ function App () {
       }}
     >
       <div className='App'>
-        <div className='d-flex'>
-          <Link to='/'>Home</Link>
-          <Link to='/detail'>Detail</Link>
-        </div>
         <div className='container'>
           <div className='row'>
             {pokemonList && (
