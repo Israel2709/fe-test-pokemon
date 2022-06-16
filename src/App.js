@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react'
+import './App.css'
+import { Routes, Route, Link } from 'react-router-dom'
+import Home from './Pages/Home'
+import Detail from './Pages/Detail'
+import PokemonContext from './context/pokemonContext'
+import pokemonApi from './api/pokemon'
 
-function App() {
+function App () {
+  const [pokemonList, setPokemonList] = useState()
+  const [selectedPokemon, setSelectedPokemon] = useState()
+
+  useEffect(() => {
+    async function getAllPokemon () {
+      const response = await pokemonApi.getAllPokemon()
+      setPokemonList(response)
+    }
+    getAllPokemon()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <PokemonContext.Provider
+      value={{
+        pokemonList,
+        setPokemonList,
+        selectedPokemon,
+        setSelectedPokemon
+      }}
+    >
+      <div className='App'>
+        <div className='d-flex'>
+          <Link to='/'>Home</Link>
+          <Link to='/detail'>Detail</Link>
+        </div>
+        <div className='container'>
+          <div className='row'>
+            {pokemonList && (
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='detail/:id' element={<Detail />} />
+              </Routes>
+            )}
+          </div>
+        </div>
+      </div>
+    </PokemonContext.Provider>
+  )
 }
 
-export default App;
+export default App
